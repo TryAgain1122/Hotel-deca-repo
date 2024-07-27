@@ -63,3 +63,7 @@
     --chart-5: 340 75% 55%;
   }
 }
+
+.spacing {
+  margin-bottom: 2rem;
+}

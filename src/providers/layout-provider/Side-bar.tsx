@@ -91,7 +91,7 @@ const SideBar: React.FC<SidebarProps> = ({showSidebar, setShowSidebar, loggedInU
     <Drawer open={showSidebar} onClose={() => setShowSidebar(false)} closable>
         <div className="flex flex-col gap-14">
             {menuItmesToShow.map((item, index) => (
-                <div className={`flex gap-4 items-center  
+                <div className={`flex gap-4 items-center cursor-pointer  
                     ${item.isActive ? 'bg-gray-700 text-white cursor-pointer px-7 py-3 rounded' : ''}`}
                     key={index}
                     onClick={() => {

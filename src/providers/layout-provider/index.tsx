@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import Header from "./Header";
 import { UserType } from "@/interfaces";
 import { getCurrentUserFromMongoDB } from "@/server-actions/user";
-import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { message } from "antd";
 import { usePathname } from "next/navigation";
