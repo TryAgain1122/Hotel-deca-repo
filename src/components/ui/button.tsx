@@ -25,11 +25,17 @@ const buttonVariants = cva(
         lg: "h-11 rounded-md px-8",
         icon: "h-10 w-10",
       },
+
+    //   loading?: boolean | {
+    //     delay?: number;
+    // };
     },
     defaultVariants: {
       variant: "default",
       size: "default",
     },
+
+    
   }
 )
 

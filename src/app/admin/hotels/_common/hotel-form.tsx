@@ -1,5 +1,5 @@
 "use client";
-import { Button as Button2} from "@/components/ui/button";
+
 import { Button } from 'antd'
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -17,16 +17,16 @@ import {
 import { Input } from "@/components/ui/input";
 
 import { message, Upload } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { UploadImageToFirebaseAndReturnUrls } from "@/helpers/image-upload";
-import { AddHotel } from "@/server-actions/hotels";
+import { AddHotel, EditHotel } from "@/server-actions/hotels";
 
 const formSchema = z.object({
-  HotelRoom: z.string().min(2, {
+  name: z.string().min(2, {
     message: "must be at least 2 characters.",
   }),
-  OwnerName: z.string().min(2, {
+  owner: z.string().min(2, {
     message: "must be at least 2 characters ",
   }),
   email: z.string().email(),
@@ -34,13 +34,7 @@ const formSchema = z.object({
   address: z.string(),
 });
 
-const HotelForm = ({
-  type = "add",
-  initialData, 
-}: {
-  type: string,
-  initialData?: any
-}) => {
+const HotelForm = ({ type = "add", initialData,}: { type: string, initialData?: any}) => {
   const [loading, setLoading] = useState(false);
   const [uploadFiles, setUploadFiles] = useState([]) as any[];
   const [existingMedia = [], setExistingMedia] = useState(
@@ -49,8 +43,8 @@ const HotelForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      HotelRoom: "",
-      OwnerName: "",
+      name: "",
+      owner: "",
       email: "",
       phone: "",
       address: "",
@@ -58,13 +52,29 @@ const HotelForm = ({
   });
   const router = useRouter();
 
+  useEffect(() => {
+    form.reset({
+      name: initialData?.name || "",
+      owner: initialData?.owner || "",
+      email: initialData?.email || "",
+      phone: initialData?.phone || "",
+      address: initialData?.address || "",
+    });
+  }, [initialData, form]);
+
   const handleSubmit = async (values: any) => {
     try {
       setLoading(true);
-      values.media = await UploadImageToFirebaseAndReturnUrls(uploadFiles)
+      const newUrls = await UploadImageToFirebaseAndReturnUrls(uploadFiles)
+      values.media = [...existingMedia, ...newUrls]
       let response: any = null;
       if (type === "add") {
           response = await AddHotel(values)
+      } else {
+        response = await EditHotel({
+          hotelId: initialData._id,
+          payload: values
+        })
       }
 
       if (response.success) {
@@ -77,16 +87,18 @@ const HotelForm = ({
       }
       console.log("success", values);
     } catch (error: any) {
+      console.log(error)
       message.error(error.message);
+      
     }
   };
   return (
     <div className="mt-14 gap-20 mb-3">
-      <Form {...form}>
+      <Form {...form} >
         <form className="space-y-8" onSubmit={form.handleSubmit(handleSubmit)}>
           <FormField
             control={form.control}
-            name="HotelRoom"
+            name="name"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Room Name</FormLabel>
@@ -100,7 +112,7 @@ const HotelForm = ({
 
           <FormField
             control={form.control}
-            name="OwnerName"
+            name="owner"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Owner Name</FormLabel>
@@ -154,7 +166,22 @@ const HotelForm = ({
             )}
           />
 
-          <Upload
+          <div className='col-span-3 flex flex-row gap-3'>
+            <div className='flex gap-5 '>
+              {existingMedia.map((media: any, index: number) => (
+                <div className='flex flex-col border border-solid rounded-md p-3' key={index}>
+                <img src={media} alt='media' className='h-20 w-20 object-cover' />
+                <span className='underline text-sm cursor-pointer mt-3 text-center' onClick={() => {
+                  setExistingMedia(
+                    existingMedia.filter(
+                      (item: string, i: number) => i !== index
+                    )
+                  )
+                }}>Remove</span>
+                </div>      
+              ))}
+            </div>
+            <Upload
             listType="picture-card"
             beforeUpload={(file) => {
               setUploadFiles([...uploadFiles, file]);
@@ -164,16 +191,20 @@ const HotelForm = ({
           >
             <span className="text-xs text-gray-500 p-3">Upload Media</span>
           </Upload>
+          </div>
 
+          
+ 
           <div className="flex justify-start gap-5">
-            <Button2
-              variant="destructive"
+            <Button
               disabled={loading}
               onClick={() => router.push("/admin/hotels")}
             >
               Cancel
-            </Button2>
-            <Button2 type="submit">Submit</Button2>
+            </Button>
+            <Button loading={loading} htmlType="submit" type='primary'>
+              { type === 'add' ? "Add" : "update" }
+            </Button>
           </div>
         </form>
       </Form>
