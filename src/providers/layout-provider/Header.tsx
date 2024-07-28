@@ -25,6 +25,7 @@ const Header: React.FC<HeaderProps> = ({ loggedInUserData }) => {
         <ProjectTitle />
         <div className="flex gap-3 items-center">
           <DarkTheme />
+          <span className="text-gray-500 text-sm">{loggedInUserData.name}</span>
           <UserInfo loggedInUserData={loggedInUserData} />
         </div>
       </div>

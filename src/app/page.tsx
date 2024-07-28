@@ -1,15 +1,17 @@
 import { UserType } from "@/interfaces";
 import { getCurrentUserFromMongoDB } from "@/server-actions/user";
 import { UserButton } from "@clerk/nextjs";
+import RoomsData from "./admin/_common/room-data";
+import { Suspense } from "react";
+import Spinner from "./components/Spinner";
 
 
 export default async function Home() {
-  await getCurrentUserFromMongoDB();
-
-
   return (
     <div> 
-      <h1>Homepage</h1>
+      <Suspense fallback={<Spinner/>}>
+        <RoomsData />
+      </Suspense>
     </div>
   );
 }
