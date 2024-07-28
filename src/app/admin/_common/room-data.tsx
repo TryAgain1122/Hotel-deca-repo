@@ -24,14 +24,27 @@ async function RoomsData() {
     );
   }
   return (
-    <div className="grid cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 mt-10">
+    <div className="grid cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-2">
       {rooms.map((room: RoomType) => (
         <Link href={`book-room/${room._id}`} key={room._id}>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 border-gray-200 border-solid border rounded-md hover:scale-[1.1] transition-all duration-300 shadow-md">
             <img
               src={room.media[0]}
-              className="w-full h-64 object-cover rounded-md shadow-md"
+              className="w-full h-64 object-cover rounded-lg"
             />
+
+            <div className="px-3 py-2 flex flex-col text-sm gap-2">
+              <span className="text-md font-semibold">{room.name}</span>
+              <span className="text-slate-900 text-lg">
+                {room.hotel.name} - {room.hotel.address}
+              </span>
+              <hr className="border-gray-200 border border-solid" />
+              <div className="flex justify-between items-center">
+                <span>
+                  ₱ <strong> {room.rentPerDay}</strong> /Per Day
+                </span>
+              </div>
+            </div>
           </div>
         </Link>
       ))}

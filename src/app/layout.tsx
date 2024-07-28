@@ -4,20 +4,14 @@ import { ThemeProvider } from "./components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import LayoutProvider from "@/providers/layout-provider";
 import { Toaster } from "@/components/ui/toaster";
-import { Poppins } from 'next/font/google';
+import { Inter } from 'next/font/google';
 
 export const metadata: Metadata = {
   title: "Urban deca tower",
   description: "Explore a best hotel",
 };
 
-const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '500', '700', '900'],
-  style: ['italic', 'normal'],
-  variable: '--font-poppins',
-});
-
+const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
   children,
@@ -27,7 +21,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
     <html lang="en">
-      <body className={poppins.className}> 
+      <body className={inter.className}> 
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

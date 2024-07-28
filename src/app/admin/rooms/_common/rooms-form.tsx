@@ -5,7 +5,7 @@ import { Button, Form, Input, Select, Upload, message } from "antd";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { HotelType } from "@/interfaces";
-import { AddRoom } from "@/server-actions/room";
+import { AddRoom, EditRoom } from "@/server-actions/room";
 
 function RoomsForm({
   type = "add",
@@ -31,7 +31,12 @@ function RoomsForm({
       let response: any = null;
       if (type === "add") {
         response = await AddRoom(values);
-      } 
+      } else {
+        response = await EditRoom({
+          roomId: initialData._id,
+          payload: values,
+        })
+      }
 
       if (response.success) {
         message.success(response.message);

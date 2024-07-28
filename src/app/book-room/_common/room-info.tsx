@@ -1,18 +1,17 @@
 import { RoomType } from "@/interfaces";
 import { Image } from "antd";
+import React from "react";
 
-interface RoomInfoProps {
-  room: RoomType;
-}
-const RoomInfo: React.FC<RoomInfoProps> = ({ room }) => {
+function RoomInfo({ room }: { room: RoomType }) {
   const renderRoomProperty = (label: string, value: string) => {
     return (
-      <div className="flex flex-col text-gray-600">
+      <div className="flex flex-col  text-gray-600">
         <span className="text-xs">{label}</span>
-        <span className="text-xs font-semibold">{value}</span>
+        <span className="text-sm font-semibold"> {value}</span>
       </div>
     );
   };
+
   return (
     <div>
       <div className="flex flex-wrap gap-7">
@@ -27,7 +26,7 @@ const RoomInfo: React.FC<RoomInfoProps> = ({ room }) => {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-col-3 gap-7 mt-7 capitalize">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-7 mt-7 capitalize text-3xl">
         {renderRoomProperty("Room Name", room.name)}
         {renderRoomProperty("Room Type", room.type)}
         {renderRoomProperty("Room Number", room.roomNumber.toString())}
@@ -39,20 +38,20 @@ const RoomInfo: React.FC<RoomInfoProps> = ({ room }) => {
       </div>
 
       <div className="mt-7">
-        <span className="text-xs Amenities">Amenities</span>
+      <span className="text-xs">Amenities</span>
         <div className="flex flex-wrap gap-7 mt-2">
-            {room.amenities.split(",").map((amenity, index ) => (
-                <div
-                    key={index}
-                    className="bg-gray-200 text-gray-600 rounded-md px-3 py-1 text-xs capitalize"
-                >
-                    {amenity}
-                </div>
-            ))}
+          {room.amenities.split(",").map((amenity, index) => (
+            <div
+              key={index}
+              className="bg-slate-600 text-white rounded-md px-2 py-3 text-xs capitalize"
+            >
+              {amenity}
+            </div>
+          ))}
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default RoomInfo;
