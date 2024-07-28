@@ -23,7 +23,7 @@ async function BookRoomPage({ params }: { params: {id: string}}) {
                     <RoomInfo room={room}/>
                 </div>
                 <div className="col-span-1">
-                    <Checkout />
+                    <Checkout room={room}/>
                 </div>
             </div>
         </div>

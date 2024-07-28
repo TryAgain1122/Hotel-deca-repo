@@ -1,3 +1,4 @@
+
 import { RoomType } from "@/interfaces";
 import RoomModel from "@/models/room-models";
 import { Card, CardContent } from "@/components/ui/card";
@@ -24,7 +25,7 @@ async function RoomsData() {
     );
   }
   return (
-    <div className="grid cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-2">
+    <div className="grid cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-7">
       {rooms.map((room: RoomType) => (
         <Link href={`book-room/${room._id}`} key={room._id}>
           <div className="flex flex-col gap-2 border-gray-200 border-solid border rounded-md hover:scale-[1.1] transition-all duration-300 shadow-md">
